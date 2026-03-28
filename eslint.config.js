@@ -1,3 +1,7 @@
+/**
+ * ESLint flat config for the repo: TypeScript + React Hooks + Vite refresh rules.
+ * Applies to *.ts/*.tsx; ignores build output under dist/.
+ */
 import js from '@eslint/js';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';

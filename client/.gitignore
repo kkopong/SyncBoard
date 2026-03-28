@@ -1,3 +1,5 @@
+# Client subfolder ignores: build output, local env, editor junk (see also repo-root .gitignore).
+#
 # Logs
 logs
 *.log

@@ -1,3 +1,7 @@
+/**
+ * Draggable sticky note: Framer Motion for drag + corner resize, local state for edit mode.
+ * Persists position/size/text/votes through Board’s onUpdate callback (InsForge DB + realtime).
+ */
 import { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, PanInfo } from 'framer-motion';
 import { Trash2, GripHorizontal, ThumbsUp, ThumbsDown } from 'lucide-react';
@@ -5,6 +9,7 @@ import { useUser } from '@insforge/react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+/** Merges Tailwind class strings and resolves conflicts (tailwind-merge + clsx). */
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -35,13 +40,16 @@ export const Note = ({ id, text, x: initialX, y: initialY, width: initialWidth, 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const noteRef = useRef<HTMLDivElement>(null);
   
+  /** Framer Motion motion values — pixel offsets from the board’s top-left. */
   const x = useMotionValue(initialX);
   const y = useMotionValue(initialY);
 
+  // Keep the textarea in sync when realtime updates change `text` from another tab.
   useEffect(() => {
     setLocalText(text);
   }, [text]);
 
+  // Remote resizes or reloads can change width/height props without remounting the note.
   useEffect(() => {
     setDimensions({ width: initialWidth, height: initialHeight });
   }, [initialWidth, initialHeight]);
@@ -57,6 +65,7 @@ export const Note = ({ id, text, x: initialX, y: initialY, width: initialWidth, 
 
   const handleBlur = () => {
     setIsEditing(false);
+    // Avoid a no-op write when nothing changed (reduces churn on the wire).
     if (localText !== text) {
       onUpdate(id, { text: localText });
     }
@@ -81,6 +90,7 @@ export const Note = ({ id, text, x: initialX, y: initialY, width: initialWidth, 
     });
   };
 
+  /** Flush final width/height after the user finishes dragging the corner handle. */
   const handleResizeEnd = () => {
     onUpdate(id, { width: dimensions.width, height: dimensions.height });
   };
@@ -101,6 +111,7 @@ export const Note = ({ id, text, x: initialX, y: initialY, width: initialWidth, 
       }}
       onDragEnd={handleDragEnd}
       className={cn(
+        // `color` is a Tailwind bg-* class from Board.COLORS; sticky-note adds drop shadow in index.css.
         "absolute p-5 rounded-2xl sticky-note flex flex-col gap-3 cursor-grab active:cursor-grabbing overflow-hidden group/note shadow-xl transition-shadow hover:shadow-2xl",
         "select-none border border-black/5", // Removed CSS resize
         color
@@ -133,6 +144,7 @@ export const Note = ({ id, text, x: initialX, y: initialY, width: initialWidth, 
             style={{ outline: 'none' }}
           />
         ) : (
+          // Single click enters edit mode (footer hint still says “double click” for discoverability).
           <div
             onClick={() => setIsEditing(true)}
             className="w-full h-full text-black font-medium text-lg leading-tight whitespace-pre-wrap cursor-text break-words"
@@ -148,6 +160,7 @@ export const Note = ({ id, text, x: initialX, y: initialY, width: initialWidth, 
           ID: {id.slice(-6).toUpperCase()}
         </div>
         
+        {/* Vote chips: toggles membership in upvoted_by / downvoted_by arrays for the current user. */}
         <div className="flex items-center gap-2 bg-black/5 rounded-full px-2 py-1 pointer-events-auto border-none">
           <button 
             onClick={(e) => {

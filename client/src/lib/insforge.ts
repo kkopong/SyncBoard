@@ -1,3 +1,7 @@
+/**
+ * InsForge SDK singleton for the browser. Values come from Vite env (see vite-env.d.ts).
+ * Used by InsforgeProvider and by Board for database + realtime calls.
+ */
 import { createClient } from '@insforge/sdk';
 
 export const insforge = createClient({

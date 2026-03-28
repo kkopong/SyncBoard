@@ -1,3 +1,5 @@
+# SyncBoard repo — ignore local tooling output, secrets, and bulky deps.
+#
 # Dependencies
 node_modules/
 .pnp

@@ -1,3 +1,4 @@
+/* React mount point: full width/height shell so Board can fill the viewport. */
 #root {
   width: 100%;
   min-height: 100dvh;

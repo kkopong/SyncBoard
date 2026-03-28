@@ -1,3 +1,7 @@
+/**
+ * Main canvas after login: loads notes for the current board_id (URL ?board=...),
+ * syncs create/update/delete/move over InsForge Realtime on channel `room:{boardId}`.
+ */
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Note } from './Note';
 import { Plus, LogOut, Share2, Check } from 'lucide-react';
@@ -5,6 +9,7 @@ import { nanoid } from 'nanoid';
 import { insforge } from '../lib/insforge';
 import { useAuth, useUser } from '@insforge/react';
 
+/** Tailwind background classes persisted on each note and rendered by Note.tsx. */
 const COLORS = [
   'bg-yellow-200',
   'bg-blue-200',
@@ -14,6 +19,7 @@ const COLORS = [
   'bg-orange-200',
 ];
 
+/** Mirrors the `notes` table row shape from schema.sql (plus client-only fields). */
 interface NoteData {
   id: string;
   board_id: string;
@@ -36,6 +42,7 @@ export const Board = () => {
   const [isConnected, setIsConnected] = useState(false);
   const [boardId, setBoardId] = useState<string>('');
   const [isCopied, setIsCopied] = useState(false);
+  /** Bounds Framer drag for each Note (entire viewport-sized board area). */
   const boardRef = useRef<HTMLDivElement>(null);
 
   // Initialize Board ID from URL or generate new one
@@ -51,6 +58,7 @@ export const Board = () => {
     setBoardId(id);
   }, []);
 
+  /** Realtime channel name; must match subscribe/publish calls in this effect and handlers. */
   const channelName = boardId ? `room:${boardId}` : '';
 
   // Fetch initial notes
@@ -71,7 +79,7 @@ export const Board = () => {
     if (!boardId) return;
     fetchNotes();
 
-    // Setup Realtime
+    // Setup Realtime: connect once per board, subscribe to room channel, merge incoming events into React state.
     const setupRealtime = async () => {
       insforge.realtime.on('connect', () => {
         setIsConnected(true);
@@ -107,10 +115,12 @@ export const Board = () => {
     setupRealtime();
 
     return () => {
+      // Tear down subscription when board changes or component unmounts.
       if (channelName) insforge.realtime.unsubscribe(channelName);
     };
   }, [fetchNotes, boardId, channelName]);
 
+  /** Creates a note in DB, publishes `note-created`, and relies on optimistic local state. */
   const addNote = useCallback(async () => {
     if (!boardId) return;
     const newNote: NoteData = {
@@ -138,6 +148,7 @@ export const Board = () => {
     }
   }, [boardId, channelName]);
 
+  /** Persists partial row updates and broadcasts `note-updated` (position, text, votes, etc.). */
   const updateNote = useCallback(async (id: string, updates: Partial<NoteData>) => {
     // Optimistic update
     setNotes(prev => prev.map(note => 
@@ -151,6 +162,7 @@ export const Board = () => {
     }
   }, [channelName]);
 
+  /** Removes the row and notifies other clients with `note-deleted`. */
   const deleteNote = useCallback(async (id: string) => {
     // Optimistic update
     setNotes(prev => prev.filter(note => note.id !== id));
@@ -162,6 +174,7 @@ export const Board = () => {
     }
   }, [channelName]);
 
+  /** Copies the full URL (includes ?board=) so collaborators join the same room. */
   const copyBoardLink = () => {
     navigator.clipboard.writeText(window.location.href);
     setIsCopied(true);
@@ -170,6 +183,7 @@ export const Board = () => {
 
   return (
     <div ref={boardRef} className="w-full min-h-[100dvh] h-[100dvh] overflow-hidden canvas-grid relative bg-slate-950">
+      {/* Top toolbar: actions + connection pill + account. */}
       <div className="absolute top-6 left-6 z-10 flex items-center gap-6 bg-slate-900/85 backdrop-blur-md p-2 px-4 rounded-2xl shadow-sm border border-slate-700 shadow-slate-950/50">
         <h1 className="text-xl font-bold text-slate-100 tracking-tight">SyncBoard</h1>
 
@@ -226,10 +240,12 @@ export const Board = () => {
         </div>
       </div>
 
+      {/* Static hint for drag/edit affordances. */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-slate-500 select-none text-sm bg-slate-900/60 backdrop-blur-sm px-4 py-1 rounded-full border border-slate-700/80">
         Drag notes to move • Double click to edit
       </div>
 
+      {/* Notes are position:absolute children; z-order follows render order. */}
       <div className="relative w-full h-full pointer-events-auto">
         {notes.map(note => (
           <Note

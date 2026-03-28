@@ -1,5 +1,7 @@
 # SyncBoard Backend (InsForge)
 
+<!-- Reader note: the React client subscribes to InsForge Realtime channels named `room:{boardId}` (see Board.tsx). The channel name below is legacy wording. -->
+
 This project uses **InsForge** as its real-time backend. InsForge provides:
 1. **PostgreSQL Database**: Managed relational database for persistent storage.
 2. **Realtime Engine**: WebSocket-based broadcast for instant synchronization.
@@ -23,3 +25,5 @@ The application broadcasts the following events over the `notes_board` channel:
 - `note-deleted`: Triggered when a note is removed.
 
 The client also listens for these events to keep all tabs in sync.
+
+<!-- End of backend README. -->

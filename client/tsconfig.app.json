@@ -1,4 +1,5 @@
 {
+  // Browser / React source: DOM libs, JSX, strict unused checks, no emit (Vite bundles).
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2022",

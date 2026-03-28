@@ -1,4 +1,7 @@
 -- SyncBoard Database Schema for InsForge (PostgreSQL)
+--
+-- Run this script in the InsForge SQL editor (see server/README.md).
+-- The client reads/writes the `notes` table and broadcasts changes on realtime channels per board.
 
 -- The 'notes' table stores all sticky notes and their properties.
 -- Real-time updates are handled by InsForge Realtime, and data is persisted here.
@@ -20,9 +23,10 @@ CREATE TABLE IF NOT EXISTS notes (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Index for faster filtering by board_id
+-- Index for faster filtering by board_id (every board query scopes by this column).
 CREATE INDEX IF NOT EXISTS idx_notes_board_id ON notes(board_id);
 
+-- Optional hardening: enable RLS and policies in InsForge when you lock down anon access.
 -- Enable Row Level Security (RLS) if needed, or keep it public for this boilerplate.
 -- ALTER TABLE notes ENABLE ROW LEVEL SECURITY;
 -- CREATE POLICY "Public Access" ON notes FOR ALL USING (true);

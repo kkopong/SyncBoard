@@ -1,3 +1,7 @@
+/**
+ * Sign-in / sign-up screen: email+password via useAuth, or OAuth through the InsForge SDK.
+ * Shown when no user session exists (see App.tsx). Framer Motion handles light enter animation.
+ */
 import { useState } from 'react';
 import { useAuth } from '@insforge/react';
 import { insforge } from '../lib/insforge';
@@ -13,6 +17,7 @@ export const Auth = () => {
 
   const { signIn, signUp } = useAuth();
 
+  /** Redirects the browser to the provider; InsForge returns the OAuth URL. */
   const handleSocialLogin = async (provider: 'google' | 'apple') => {
     setError(null);
     setIsLoading(true);
@@ -33,6 +38,7 @@ export const Auth = () => {
     }
   };
 
+  /** Email/password flow: toggles between signIn and signUp based on isLogin. */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -59,6 +65,7 @@ export const Auth = () => {
 
   return (
     <div className="min-h-screen w-full flex items-center justify-center bg-slate-950 canvas-grid relative overflow-hidden px-4 py-12">
+      {/* Decorative blurred orbs (purely visual). */}
       <div className="absolute top-1/4 -left-20 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-purple-600/15 rounded-full blur-3xl animate-pulse delay-700" />
 
@@ -68,6 +75,7 @@ export const Auth = () => {
         className="w-full max-w-md bg-slate-900/80 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl border border-slate-700 shadow-slate-950/80 relative z-10"
       >
         <div className="flex flex-col items-center mb-8">
+          {/* Brand mark from /public; favicon uses the same asset. */}
           <div className="mb-4 rotate-3 transform transition-transform hover:rotate-6">
             <img
               src="/syncboard-icon.png"
@@ -83,6 +91,7 @@ export const Auth = () => {
           </p>
         </div>
 
+        {/* OAuth entry points (Google / Apple). */}
         <div className="grid grid-cols-2 gap-4 mb-8">
           <button
             onClick={() => handleSocialLogin('google')}
@@ -109,6 +118,7 @@ export const Auth = () => {
           </button>
         </div>
 
+        {/* Visual separator before the email form. */}
         <div className="relative mb-8">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-slate-600" />
@@ -149,6 +159,7 @@ export const Auth = () => {
             </div>
           </div>
 
+          {/* Mount/unmount error banner with a short height animation. */}
           <AnimatePresence mode="wait">
             {error && (
               <motion.div
@@ -183,6 +194,7 @@ export const Auth = () => {
           </button>
         </form>
 
+        {/* Switch between sign-in and sign-up without leaving the page. */}
         <div className="mt-8 text-center border-t border-slate-700 pt-6">
           <p className="text-slate-400 text-sm">
             {isLogin ? "Don't have an account?" : "Already have an account?"}

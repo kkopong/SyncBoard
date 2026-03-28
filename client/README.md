@@ -1,3 +1,5 @@
+<!-- Default Vite + React template README. SyncBoard app code and docs live primarily in the repo root and server/. -->
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
