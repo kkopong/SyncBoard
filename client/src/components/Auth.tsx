@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '@insforge/react';
 import { insforge } from '../lib/insforge';
-import { LogIn, UserPlus, Mail, Lock, Loader2, StickyNote } from 'lucide-react';
+import { LogIn, UserPlus, Mail, Lock, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const Auth = () => {
@@ -68,8 +68,14 @@ export const Auth = () => {
         className="w-full max-w-md bg-slate-900/80 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl border border-slate-700 shadow-slate-950/80 relative z-10"
       >
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-950/60 rotate-3 transform transition-transform hover:rotate-6 mb-4">
-            <StickyNote size={32} />
+          <div className="mb-4 rotate-3 transform transition-transform hover:rotate-6">
+            <img
+              src="/syncboard-icon.png"
+              alt="SyncBoard"
+              width={88}
+              height={88}
+              className="rounded-2xl object-cover shadow-xl shadow-indigo-950/60 ring-1 ring-white/10"
+            />
           </div>
           <h1 className="text-3xl font-bold text-slate-100 tracking-tight">SyncBoard</h1>
           <p className="text-slate-400 mt-2 text-center">
