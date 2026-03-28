@@ -169,15 +169,15 @@ export const Board = () => {
   };
 
   return (
-    <div ref={boardRef} className="w-screen h-screen overflow-hidden canvas-grid relative bg-slate-50">
-      <div className="absolute top-6 left-6 z-10 flex items-center gap-6 bg-white/80 backdrop-blur-md p-2 px-4 rounded-2xl shadow-sm border border-slate-200">
-        <h1 className="text-xl font-bold text-slate-900 tracking-tight">SyncBoard</h1>
-        
-        <div className="h-6 w-[1px] bg-slate-200" />
+    <div ref={boardRef} className="w-full min-h-[100dvh] h-[100dvh] overflow-hidden canvas-grid relative bg-slate-950">
+      <div className="absolute top-6 left-6 z-10 flex items-center gap-6 bg-slate-900/85 backdrop-blur-md p-2 px-4 rounded-2xl shadow-sm border border-slate-700 shadow-slate-950/50">
+        <h1 className="text-xl font-bold text-slate-100 tracking-tight">SyncBoard</h1>
+
+        <div className="h-6 w-[1px] bg-slate-600" />
 
         <button
           onClick={addNote}
-          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-xl shadow-lg shadow-indigo-200 transition-all transform hover:scale-105 active:scale-95 text-sm font-semibold"
+          className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-xl shadow-lg shadow-indigo-950/60 transition-all transform hover:scale-105 active:scale-95 text-sm font-semibold"
         >
           <Plus size={18} />
           <span>New Note</span>
@@ -186,39 +186,39 @@ export const Board = () => {
         <button
           onClick={copyBoardLink}
           className={`flex items-center gap-2 px-4 py-1.5 rounded-xl transition-all border text-sm font-semibold ${
-            isCopied 
-              ? 'bg-emerald-50 border-emerald-200 text-emerald-600' 
-              : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+            isCopied
+              ? 'bg-emerald-950/50 border-emerald-800 text-emerald-400'
+              : 'bg-slate-800 border-slate-600 text-slate-300 hover:bg-slate-700/80'
           }`}
         >
           {isCopied ? <Check size={18} /> : <Share2 size={18} />}
           <span>{isCopied ? 'Copied Link' : 'Share Board'}</span>
         </button>
 
-        <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
+        <div className="flex items-center gap-2 text-xs font-medium text-slate-400">
           {isConnected ? (
-            <span className="flex items-center gap-1.5 text-emerald-600">
+            <span className="flex items-center gap-1.5 text-emerald-400">
               <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
               Live
             </span>
           ) : (
-            <span className="flex items-center gap-1.5 text-slate-400">
-              <span className="w-2 h-2 bg-slate-300 rounded-full" />
+            <span className="flex items-center gap-1.5 text-slate-500">
+              <span className="w-2 h-2 bg-slate-600 rounded-full" />
               Connecting...
             </span>
           )}
         </div>
 
-        <div className="h-6 w-[1px] bg-slate-200" />
+        <div className="h-6 w-[1px] bg-slate-600" />
 
         <div className="flex items-center gap-3">
           <div className="flex flex-col items-end">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Signed in as</span>
-            <span className="text-xs font-semibold text-slate-700">{user?.email}</span>
+            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Signed in as</span>
+            <span className="text-xs font-semibold text-slate-200">{user?.email}</span>
           </div>
           <button
             onClick={() => signOut()}
-            className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+            className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-950/40 rounded-xl transition-all"
             title="Logout"
           >
             <LogOut size={18} />
@@ -226,7 +226,7 @@ export const Board = () => {
         </div>
       </div>
 
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-slate-400 select-none text-sm bg-white/50 backdrop-blur-sm px-4 py-1 rounded-full border border-white/50">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 text-slate-500 select-none text-sm bg-slate-900/60 backdrop-blur-sm px-4 py-1 rounded-full border border-slate-700/80">
         Drag notes to move • Double click to edit
       </div>
 

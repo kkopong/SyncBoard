@@ -9,8 +9,8 @@ function Application() {
 
   if (!isLoaded) {
     return (
-      <div className="h-screen w-screen flex items-center justify-center bg-slate-50 canvas-grid">
-        <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin" />
+      <div className="flex min-h-[100dvh] h-[100dvh] w-full items-center justify-center bg-slate-950 canvas-grid">
+        <div className="w-12 h-12 border-4 border-indigo-900 border-t-indigo-400 rounded-full animate-spin" />
       </div>
     );
   }

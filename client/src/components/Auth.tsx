@@ -58,22 +58,21 @@ export const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-slate-50 canvas-grid relative overflow-hidden px-4 py-12">
-      {/* Decorative background blobs */}
-      <div className="absolute top-1/4 -left-20 w-80 h-80 bg-indigo-200/40 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-purple-200/40 rounded-full blur-3xl animate-pulse delay-700" />
+    <div className="min-h-screen w-full flex items-center justify-center bg-slate-950 canvas-grid relative overflow-hidden px-4 py-12">
+      <div className="absolute top-1/4 -left-20 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-1/4 -right-20 w-80 h-80 bg-purple-600/15 rounded-full blur-3xl animate-pulse delay-700" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md bg-white/80 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl shadow-indigo-100 border border-slate-200 relative z-10"
+        className="w-full max-w-md bg-slate-900/80 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl border border-slate-700 shadow-slate-950/80 relative z-10"
       >
         <div className="flex flex-col items-center mb-8">
-          <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-200 rotate-3 transform transition-transform hover:rotate-6 mb-4">
+          <div className="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl shadow-indigo-950/60 rotate-3 transform transition-transform hover:rotate-6 mb-4">
             <StickyNote size={32} />
           </div>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight">SyncBoard</h1>
-          <p className="text-slate-500 mt-2 text-center">
+          <h1 className="text-3xl font-bold text-slate-100 tracking-tight">SyncBoard</h1>
+          <p className="text-slate-400 mt-2 text-center">
             {isLogin ? 'Welcome back! Ready to sync?' : 'Join the board and start collaborating.'}
           </p>
         </div>
@@ -82,7 +81,7 @@ export const Auth = () => {
           <button
             onClick={() => handleSocialLogin('google')}
             disabled={isLoading}
-            className="flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 py-3 px-4 rounded-2xl text-sm font-bold text-slate-700 transition-all active:scale-95 shadow-sm active:shadow-none disabled:opacity-50"
+            className="flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 py-3 px-4 rounded-2xl text-sm font-bold text-slate-200 transition-all active:scale-95 shadow-sm active:shadow-none disabled:opacity-50"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -95,7 +94,7 @@ export const Auth = () => {
           <button
             onClick={() => handleSocialLogin('apple')}
             disabled={isLoading}
-            className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-black border border-slate-900 py-3 px-4 rounded-2xl text-sm font-bold text-white transition-all active:scale-95 shadow-md active:shadow-none disabled:opacity-50"
+            className="flex items-center justify-center gap-2 bg-slate-100 hover:bg-white border border-slate-100 py-3 px-4 rounded-2xl text-sm font-bold text-slate-900 transition-all active:scale-95 shadow-md active:shadow-none disabled:opacity-50"
           >
             <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
               <path d="M17.05 20.28c-.96.95-2.04 2.22-3.37 2.22-1.3 0-1.74-.84-3.37-.84-1.63 0-2.14.82-3.35.84-1.3.02-2.52-1.44-3.48-2.43C1.5 18.06 0 14.65 0 11.41c0-3.32 2.05-5.07 4-5.07 1.15 0 2.02.66 2.94.66.86 0 1.88-.73 3.23-.73 1.17 0 2.23.51 3 1.4-2.58 1.43-2.14 5.35.53 6.55-1.05 2.5-2.4 4.88-3.65 6.06zM12.03 5.25c-.02-2.13 1.76-4 3.73-4.25.17 2.15-1.76 4.09-3.73 4.25z"/>
@@ -106,40 +105,40 @@ export const Auth = () => {
 
         <div className="relative mb-8">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200"></div>
+            <div className="w-full border-t border-slate-600" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white/80 px-4 text-slate-400 font-bold backdrop-blur-sm">Or continue with</span>
+            <span className="bg-slate-900/80 px-4 text-slate-500 font-bold backdrop-blur-sm">Or continue with</span>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-slate-700 ml-1">Email</label>
+            <label className="text-sm font-semibold text-slate-300 ml-1">Email</label>
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all"
+                className="w-full bg-slate-800/80 border border-slate-600 rounded-2xl py-3 pl-12 pr-4 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-900/50 focus:border-indigo-400 transition-all"
               />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-sm font-semibold text-slate-700 ml-1">Password</label>
+            <label className="text-sm font-semibold text-slate-300 ml-1">Password</label>
             <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
               <input
                 type="password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-3 pl-12 pr-4 text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-500 transition-all"
+                className="w-full bg-slate-800/80 border border-slate-600 rounded-2xl py-3 pl-12 pr-4 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-4 focus:ring-indigo-900/50 focus:border-indigo-400 transition-all"
               />
             </div>
           </div>
@@ -150,7 +149,7 @@ export const Auth = () => {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="bg-red-50 border border-red-100 text-red-600 px-4 py-2 rounded-xl text-sm font-medium"
+                className="bg-red-950/40 border border-red-900/60 text-red-400 px-4 py-2 rounded-xl text-sm font-medium"
               >
                 {error}
               </motion.div>
@@ -160,7 +159,7 @@ export const Auth = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-indigo-100 flex items-center justify-center gap-2 transform transition-all active:scale-95 mt-4"
+            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-indigo-950/50 flex items-center justify-center gap-2 transform transition-all active:scale-95 mt-4"
           >
             {isLoading ? (
               <Loader2 className="animate-spin" size={20} />
@@ -178,12 +177,12 @@ export const Auth = () => {
           </button>
         </form>
 
-        <div className="mt-8 text-center border-t border-slate-100 pt-6">
-          <p className="text-slate-500 text-sm">
+        <div className="mt-8 text-center border-t border-slate-700 pt-6">
+          <p className="text-slate-400 text-sm">
             {isLogin ? "Don't have an account?" : "Already have an account?"}
             <button
               onClick={() => setIsLogin(!isLogin)}
-              className="ml-2 text-indigo-600 font-bold hover:text-indigo-700 transition-colors"
+              className="ml-2 text-indigo-400 font-bold hover:text-indigo-300 transition-colors"
             >
               {isLogin ? 'Sign Up' : 'Sign In'}
             </button>

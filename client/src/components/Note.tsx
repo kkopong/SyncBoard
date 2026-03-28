@@ -63,7 +63,7 @@ export const Note = ({ id, text, x: initialX, y: initialY, width: initialWidth, 
   };
 
   // Custom Resize Logic with Bounds
-  const handleResize = (e: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+  const handleResize = (_e: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     setDimensions(prev => {
       let newWidth = Math.max(160, prev.width + info.delta.x);
       let newHeight = Math.max(120, prev.height + info.delta.y);
