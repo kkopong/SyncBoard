@@ -1,0 +1,26 @@
+# SyncBoard — Vite + React app lives in /client (not the repo root).
+# This file at the repo root tells Netlify where to install, build, and publish from.
+#
+# Docs: https://docs.netlify.com/configure-builds/file-based-configuration/
+
+[build]
+  # Run all build commands from this subfolder (where package.json and vite live).
+  base = "client"
+  command = "npm install && npm run build"
+  # Output of `vite build` (relative to `base`)
+  publish = "dist"
+
+[build.environment]
+  # Vite 7 builds reliably on current LTS; override if Netlify’s default is too old.
+  NODE_VERSION = "22"
+
+# Single-page app: always serve index.html so deep links and refreshes work.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Required in Netlify UI → Site configuration → Environment variables:
+#   VITE_INSFORGE_BASE_URL
+#   VITE_INSFORGE_ANON_KEY
+# Redeploy after adding them. Whitelist your Netlify URL in InsForge OAuth settings.

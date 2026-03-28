@@ -4,7 +4,7 @@
  */
 import { useState } from 'react';
 import { useAuth } from '@insforge/react';
-import { insforge } from '../lib/insforge';
+import { insforge, insforgeDeployHint, isInsforgeConfigured } from '../lib/insforge';
 import { LogIn, UserPlus, Mail, Lock, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -17,17 +17,28 @@ export const Auth = () => {
 
   const { signIn, signUp } = useAuth();
 
+  /** Production builds without VITE_INSFORGE_BASE_URL cannot reach InsForge (SDK would fall back to localhost). */
+  const authBlocked = import.meta.env.PROD && !isInsforgeConfigured();
+
   /** Redirects the browser to the provider; InsForge returns the OAuth URL. */
   const handleSocialLogin = async (provider: 'google' | 'apple') => {
     setError(null);
     setIsLoading(true);
     try {
-      const { data, error } = await insforge.auth.signInWithOAuth({ 
+      // SDK redirects via window.location when skipBrowserRedirect is omitted; data.url is only when skipping redirect.
+      const { data, error } = await insforge.auth.signInWithOAuth({
         provider,
-        redirectTo: window.location.origin
+        redirectTo: window.location.origin,
       });
       if (error) {
-        setError(error.message);
+        const msg = error.message;
+        const isGenericOAuth =
+          msg.includes('OAuth initialization') || msg.includes('unexpected error');
+        setError(
+          isGenericOAuth && !isInsforgeConfigured()
+            ? `${msg} — ${insforgeDeployHint}`
+            : msg
+        );
       } else if (data?.url) {
         window.location.href = data.url;
       }
@@ -57,7 +68,12 @@ export const Auth = () => {
         }
       }
     } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred');
+      const msg = err.message || 'An unexpected error occurred';
+      setError(
+        import.meta.env.PROD && !isInsforgeConfigured()
+          ? `${msg} — ${insforgeDeployHint}`
+          : msg
+      );
     } finally {
       setIsLoading(false);
     }
@@ -74,6 +90,13 @@ export const Auth = () => {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md bg-slate-900/80 backdrop-blur-xl p-8 rounded-[2rem] shadow-2xl border border-slate-700 shadow-slate-950/80 relative z-10"
       >
+        {authBlocked && (
+          <div className="mb-6 rounded-xl border border-amber-700/60 bg-amber-950/40 px-4 py-3 text-sm text-amber-100/95">
+            <p className="font-semibold text-amber-200">Backend URL not configured for this deploy</p>
+            <p className="mt-2 text-amber-100/80 leading-snug">{insforgeDeployHint}</p>
+          </div>
+        )}
+
         <div className="flex flex-col items-center mb-8">
           {/* Brand mark from /public; favicon uses the same asset. */}
           <div className="mb-4 rotate-3 transform transition-transform hover:rotate-6">
@@ -95,7 +118,7 @@ export const Auth = () => {
         <div className="grid grid-cols-2 gap-4 mb-8">
           <button
             onClick={() => handleSocialLogin('google')}
-            disabled={isLoading}
+            disabled={isLoading || authBlocked}
             className="flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 border border-slate-600 py-3 px-4 rounded-2xl text-sm font-bold text-slate-200 transition-all active:scale-95 shadow-sm active:shadow-none disabled:opacity-50"
           >
             <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -108,7 +131,7 @@ export const Auth = () => {
           </button>
           <button
             onClick={() => handleSocialLogin('apple')}
-            disabled={isLoading}
+            disabled={isLoading || authBlocked}
             className="flex items-center justify-center gap-2 bg-slate-100 hover:bg-white border border-slate-100 py-3 px-4 rounded-2xl text-sm font-bold text-slate-900 transition-all active:scale-95 shadow-md active:shadow-none disabled:opacity-50"
           >
             <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -175,7 +198,7 @@ export const Auth = () => {
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || authBlocked}
             className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-bold py-3.5 rounded-2xl shadow-lg shadow-indigo-950/50 flex items-center justify-center gap-2 transform transition-all active:scale-95 mt-4"
           >
             {isLoading ? (

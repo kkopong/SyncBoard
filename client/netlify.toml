@@ -1,0 +1,9 @@
+# Netlify: set "Base directory" to `client` if the repo root is not the app root.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+# Required in Netlify UI → Site configuration → Environment variables (same names as client/.env):
+#   VITE_INSFORGE_BASE_URL = https://<your-project>.<region>.insforge.app
+#   VITE_INSFORGE_ANON_KEY = <anon key from InsForge>
+# Then trigger a new deploy. Also whitelist your Netlify URL for OAuth in InsForge.
